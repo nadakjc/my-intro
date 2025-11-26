@@ -1,0 +1,26 @@
+/* 화면 전체 중앙 정렬 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    background: #20232a;
+    color: #ffffff;
+  }
+  
+  /* 제목 간단 스타일 */
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* 캔버스 테두리 */
+  #gameCanvas {
+    border: 2px solid #ffffff;
+    background: #000000;
+  }
+  

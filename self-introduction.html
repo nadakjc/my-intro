@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김민수 - 자기소개서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 0 auto 20px;
+            padding: 30mm 25mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* 헤더 */
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 25px;
+            border: 2px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-info h1 {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .header-info .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .info-item {
+            display: flex;
+        }
+
+        .info-label {
+            font-weight: bold;
+            min-width: 60px;
+            color: #667eea;
+        }
+
+        /* 섹션 스타일 */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section-content {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #444;
+            text-align: justify;
+        }
+
+        .section-content p {
+            margin-bottom: 10px;
+        }
+
+        /* 리스트 스타일 */
+        .strengths-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .strengths-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .strengths-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .strengths-list strong {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* 인용구 */
+        .quote-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* 경험 항목 */
+        .experience-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .experience-item h4 {
+            font-size: 15px;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .experience-item p {
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        /* 포부 섹션 */
+        .future-section {
+            margin-bottom: 20px;
+        }
+
+        .future-section h4 {
+            font-size: 15px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .future-section p {
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        /* 인쇄 스타일 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        /* 화면 미리보기 */
+        @media screen {
+            .page {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 1페이지 -->
+    <div class="page">
+        <!-- 헤더 (프로필 사진 + 기본 정보) -->
+        <div class="header">
+            <img src="hansome.JPG" alt="김민수 프로필" class="profile-photo" onerror="this.style.display='none';">
+            <div class="header-info">
+                <h1>김민수</h1>
+                <div class="subtitle">소프트웨어 개발자</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">전공:</span>
+                        <span>컴퓨터공학</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">경력:</span>
+                        <span>2년</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">직업:</span>
+                        <span>웹 개발자</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">희망:</span>
+                        <span>사용자 가치 창출</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 지원 동기 및 포부 -->
+        <div class="section">
+            <h2 class="section-title">지원 동기 및 포부</h2>
+            <div class="section-content">
+                <p>
+                    안녕하세요. 소프트웨어 개발자로서 사용자에게 가치 있는 서비스를 제공하고 싶은 <strong>김민수</strong>입니다.
+                </p>
+                <p>
+                    저는 대학에서 컴퓨터공학을 전공하며 프로그래밍의 기초를 다졌고, 졸업 후 2년간 스타트업에서 웹 개발 업무를 담당했습니다. 빠르게 변화하는 IT 업계에서 새로운 기술을 학습하고 적용하는 것에 큰 흥미를 느끼며, 특히 사용자 경험을 개선하는 기술적 솔루션을 찾는 것을 좋아합니다.
+                </p>
+                <p>
+                    귀사는 혁신적인 기술력과 우수한 개발 문화로 업계에서 인정받고 있으며, 이러한 환경에서 저의 기술적 역량을 더욱 발전시키고 의미 있는 프로젝트에 기여하고 싶습니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- 성격의 장단점 -->
+        <div class="section">
+            <h2 class="section-title">성격의 장단점</h2>
+            <div class="section-content">
+                <h4 style="color: #667eea; margin-bottom: 10px; font-size: 14px;">장점:</h4>
+                <ul class="strengths-list">
+                    <li>
+                        <strong>꾸준한 학습 의지:</strong> 새로운 기술 트렌드에 관심이 많아 개인 시간을 활용해 온라인 강의를 수강하고 사이드 프로젝트를 진행합니다.
+                    </li>
+                    <li>
+                        <strong>협업과 소통:</strong> 팀 프로젝트에서 다른 개발자, 디자이너, 기획자와 원활히 소통하며 공동의 목표를 달성하는 것을 중요하게 생각합니다.
+                    </li>
+                    <li>
+                        <strong>문제 해결 지향적:</strong> 복잡한 버그나 기술적 이슈에 직면했을 때 포기하지 않고 다양한 접근 방법을 시도하여 해결책을 찾습니다.
+                    </li>
+                </ul>
+                <h4 style="color: #667eea; margin-top: 15px; margin-bottom: 10px; font-size: 14px;">단점:</h4>
+                <p>
+                    <strong>완벽주의 성향:</strong> 때로는 코드의 완성도에 지나치게 집착하여 일정에 영향을 줄 수 있습니다. 이를 개선하기 위해 우선순위를 명확히 하고 적정 수준의 완성도를 목표로 하는 연습을 하고 있습니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- 생활신조 -->
+        <div class="section">
+            <h2 class="section-title">생활신조</h2>
+            <div class="quote-box">
+                "기술은 사람을 위해 존재한다"
+            </div>
+            <div class="section-content">
+                <p>
+                    개발자로서 항상 사용자의 관점에서 생각하려 노력합니다. 아무리 기술적으로 뛰어난 코드라도 실제 사용자에게 도움이 되지 않는다면 의미가 없다고 생각합니다. 사용자가 더 편리하고 효율적으로 업무를 처리할 수 있도록 돕는 것이 개발자의 사명이라고 믿습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2페이지 -->
+    <div class="page">
+        <!-- 학창시절 경험 및 특이사항 -->
+        <div class="section">
+            <h2 class="section-title">학창시절 경험 및 특이사항</h2>
+            
+            <div class="experience-item">
+                <h4>교내 해커톤 우수상 수상</h4>
+                <p>
+                    대학교 3학년 때 교내 해커톤에서 "지역 상권 활성화 앱"을 개발하여 우수상을 수상했습니다. 이 프로젝트에서 팀장을 맡아 5명의 팀원과 함께 48시간 동안 React Native로 모바일 앱을 완성했습니다.
+                </p>
+                <p>
+                    특히 백엔드 API 설계부터 프론트엔드 구현까지 전 과정에 참여하면서 풀스택 개발 경험을 쌓을 수 있었고, 짧은 시간 내에 팀원들의 역량을 파악하고 업무를 효율적으로 분배하는 리더십을 발휘했습니다.
+                </p>
+            </div>
+
+            <div class="experience-item">
+                <h4>컴퓨터공학과 학회 멘토링 활동</h4>
+                <p>
+                    대학교 4년간 컴퓨터공학과 학회에서 활동하며 후배들에게 프로그래밍을 가르치는 멘토링을 진행했습니다. 복잡한 개념을 쉽게 설명하는 능력을 기를 수 있었고, 이는 현재 팀 내에서 코드 리뷰와 기술 공유를 할 때 큰 도움이 되고 있습니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- 입사 후 포부 -->
+        <div class="section">
+            <h2 class="section-title">입사 후 포부</h2>
+            
+            <div class="future-section">
+                <h4>적응 및 단기 목표</h4>
+                <p>
+                    입사 후에는 먼저 귀사의 개발 문화와 코딩 컨벤션에 빠르게 적응하여 팀의 일원으로서 역할을 다하겠습니다. 단기적으로는 맡은 업무를 성실히 수행하면서 귀사의 비즈니스 도메인에 대한 이해도를 높이고, 기존 팀원들과의 협업을 통해 개발 실력을 향상시키겠습니다.
+                </p>
+            </div>
+
+            <div class="future-section">
+                <h4>중장기 목표</h4>
+                <p>
+                    중장기적으로는 기술 리더로 성장하여 주니어 개발자들을 멘토링하고, 새로운 기술 도입과 개발 프로세스 개선에 기여하고 싶습니다. 특히 클라우드 기술과 마이크로서비스 아키텍처에 대한 전문성을 쌓아 서비스의 확장성과 안정성 향상에 기여하겠습니다.
+                </p>
+            </div>
+
+            <div class="future-section">
+                <h4>궁극적인 목표</h4>
+                <p>
+                    궁극적으로는 귀사와 함께 성장하여 IT 업계에서 인정받는 개발자가 되고, 사용자에게 진정한 가치를 제공하는 혁신적인 서비스 개발에 핵심적인 역할을 담당하고 싶습니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0; color: #999; font-size: 12px;">
+            <p>감사합니다.</p>
+            <p style="margin-top: 5px;">&copy; 2024 김민수</p>
+        </div>
+    </div>
+
+    <script>
+        // 인쇄 시 페이지 나누기 최적화
+        window.addEventListener('beforeprint', function() {
+            document.body.style.background = 'white';
+        });
+
+        window.addEventListener('afterprint', function() {
+            document.body.style.background = '#f5f5f5';
+        });
+    </script>
+</body>
+</html>

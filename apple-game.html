@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사과 게임</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98D8C8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF6B6B;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #4ECDC4;
+        }
+
+        .missed {
+            color: #FF6B6B;
+        }
+
+        #gameCanvas {
+            border: 3px solid #4ECDC4;
+            border-radius: 10px;
+            background: #E8F5E9;
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .controls {
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: none;
+        }
+
+        .game-over h2 {
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .game-over button {
+            background: #4ECDC4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .game-over button:hover {
+            background: #45B7B8;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            color: #4ECDC4;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .start-screen p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .start-screen button {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .start-screen button:hover {
+            background: #FF5252;
+        }
+
+        .sound-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2em;
+            border: 2px solid #4ECDC4;
+            transition: all 0.3s;
+        }
+
+        .sound-control:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="sound-control" id="soundControl" onclick="toggleSound()">🔊</div>
+    <div class="start-screen" id="startScreen">
+        <h2>🍎 사과 게임 🍎</h2>
+        <p>
+            떨어지는 사과를 잡아보세요!<br>
+            마우스로 바구니를 움직여 사과를 잡으면 점수가 올라갑니다.<br>
+            사과를 10개 놓치면 게임 오버입니다.
+        </p>
+        <button onclick="startGame()">게임 시작</button>
+    </div>
+
+    <div class="game-container">
+        <h1>🍎 사과 게임</h1>
+        <div class="score-board">
+            <div class="score">점수: <span id="score">0</span></div>
+            <div class="missed">놓친 사과: <span id="missed">0</span> / 10</div>
+        </div>
+        <canvas id="gameCanvas" width="600" height="500"></canvas>
+        <div class="controls">
+            마우스를 움직여 바구니를 조작하세요
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <h2>게임 오버!</h2>
+        <p>최종 점수: <span id="finalScore">0</span></p>
+        <button onclick="restartGame()">다시 시작</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const missedElement = document.getElementById('missed');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+        const soundControl = document.getElementById('soundControl');
+
+        let score = 0;
+        let missed = 0;
+        let gameRunning = false;
+        let basketX = canvas.width / 2 - 50;
+        let apples = [];
+        let gameSpeed = 2;
+        let lastAppleTime = 0;
+        let soundEnabled = true;
+        let audioContext = null;
+        let backgroundMusicInterval = null;
+
+        // 오디오 컨텍스트 초기화
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log('Web Audio API를 지원하지 않습니다.');
+            }
+        }
+
+        // 경쾌한 효과음 생성 (사과를 잡았을 때)
+        function playCatchSound() {
+            if (!soundEnabled || !audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // 경쾌한 멜로디: 도-미-솔 (C-E-G)
+            const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5
+            let currentFreq = 0;
+
+            function playNote(index) {
+                if (index >= frequencies.length) return;
+
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(frequencies[index], audioContext.currentTime);
+                
+                gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.start(audioContext.currentTime + index * 0.1);
+                osc.stop(audioContext.currentTime + index * 0.1 + 0.2);
+
+                playNote(index + 1);
+            }
+
+            playNote(0);
+        }
+
+        // 배경음악 생성 (경쾌한 멜로디)
+        function playBackgroundMusic() {
+            if (!soundEnabled || !audioContext) return;
+
+            const notes = [
+                { freq: 523.25, time: 0 },    // C5
+                { freq: 587.33, time: 0.2 },  // D5
+                { freq: 659.25, time: 0.4 },  // E5
+                { freq: 698.46, time: 0.6 },  // F5
+                { freq: 783.99, time: 0.8 },  // G5
+                { freq: 880.00, time: 1.0 },  // A5
+                { freq: 987.77, time: 1.2 },  // B5
+                { freq: 1046.50, time: 1.4 }, // C6
+            ];
+
+            let musicTime = 0;
+            const loopDuration = 3; // 3초 반복
+
+            function playMusicLoop() {
+                if (!gameRunning || !soundEnabled) return;
+
+                notes.forEach(note => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, audioContext.currentTime + musicTime + note.time);
+                    
+                    gain.gain.setValueAtTime(0.15, audioContext.currentTime + musicTime + note.time);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + musicTime + note.time + 0.3);
+
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.start(audioContext.currentTime + musicTime + note.time);
+                    osc.stop(audioContext.currentTime + musicTime + note.time + 0.3);
+                });
+
+                musicTime += loopDuration;
+            }
+
+            // 첫 재생
+            playMusicLoop();
+
+            // 반복 재생
+            backgroundMusicInterval = setInterval(() => {
+                if (gameRunning && soundEnabled) {
+                    playMusicLoop();
+                }
+            }, loopDuration * 1000);
+        }
+
+        // 배경음악 중지
+        function stopBackgroundMusic() {
+            if (backgroundMusicInterval) {
+                clearInterval(backgroundMusicInterval);
+                backgroundMusicInterval = null;
+            }
+        }
+
+        // 사운드 토글
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            soundControl.textContent = soundEnabled ? '🔊' : '🔇';
+            
+            if (!soundEnabled) {
+                stopBackgroundMusic();
+            } else if (gameRunning) {
+                playBackgroundMusic();
+            }
+        }
+
+        // 오디오 컨텍스트 초기화 (사용자 인터랙션 후)
+        initAudio();
+
+        // 바구니 그리기
+        function drawBasket(x) {
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(x, canvas.height - 40, 100, 20);
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(x + 10, canvas.height - 35, 80, 15);
+            
+            // 바구니 손잡이
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.arc(x + 25, canvas.height - 40, 10, 0, Math.PI, true);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(x + 75, canvas.height - 40, 10, 0, Math.PI, true);
+            ctx.stroke();
+        }
+
+        // 사과 그리기
+        function drawApple(x, y) {
+            // 사과 몸체
+            ctx.fillStyle = '#FF4444';
+            ctx.beginPath();
+            ctx.ellipse(x, y, 20, 25, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 사과 하이라이트
+            ctx.fillStyle = '#FF6666';
+            ctx.beginPath();
+            ctx.ellipse(x - 5, y - 5, 8, 10, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 줄기
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(x - 2, y - 25, 4, 8);
+            
+            // 잎
+            ctx.fillStyle = '#228B22';
+            ctx.beginPath();
+            ctx.ellipse(x + 5, y - 20, 8, 5, -0.5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        // 마우스 이동 추적
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            basketX = e.clientX - rect.left - 50;
+            if (basketX < 0) basketX = 0;
+            if (basketX > canvas.width - 100) basketX = canvas.width - 100;
+        });
+
+        // 사과 생성
+        function createApple() {
+            const now = Date.now();
+            if (now - lastAppleTime > 1000) { // 1초마다 사과 생성
+                apples.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: -30,
+                    speed: gameSpeed + Math.random() * 2
+                });
+                lastAppleTime = now;
+            }
+        }
+
+        // 충돌 감지
+        function checkCollision(apple) {
+            return apple.x + 20 > basketX && 
+                   apple.x - 20 < basketX + 100 &&
+                   apple.y + 25 > canvas.height - 40 &&
+                   apple.y - 25 < canvas.height;
+        }
+
+        // 게임 업데이트
+        function update() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 사과 생성
+            createApple();
+
+            // 사과 업데이트
+            for (let i = apples.length - 1; i >= 0; i--) {
+                const apple = apples[i];
+                apple.y += apple.speed;
+
+                // 바구니와 충돌 체크
+                if (checkCollision(apple)) {
+                    score++;
+                    scoreElement.textContent = score;
+                    playCatchSound(); // 효과음 재생
+                    apples.splice(i, 1);
+                    continue;
+                }
+
+                // 화면 밖으로 나간 사과
+                if (apple.y > canvas.height) {
+                    missed++;
+                    missedElement.textContent = missed;
+                    apples.splice(i, 1);
+                    
+                    if (missed >= 10) {
+                        gameOver();
+                        return;
+                    }
+                } else {
+                    drawApple(apple.x, apple.y);
+                }
+            }
+
+            // 바구니 그리기
+            drawBasket(basketX);
+
+            // 난이도 증가
+            if (score > 0 && score % 10 === 0) {
+                gameSpeed = 2 + Math.floor(score / 10) * 0.5;
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // 게임 시작
+        function startGame() {
+            // 사용자 인터랙션 후 오디오 컨텍스트 활성화
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            startScreen.style.display = 'none';
+            gameRunning = true;
+            score = 0;
+            missed = 0;
+            apples = [];
+            gameSpeed = 2;
+            basketX = canvas.width / 2 - 50;
+            scoreElement.textContent = 0;
+            missedElement.textContent = 0;
+            
+            // 배경음악 시작
+            if (soundEnabled) {
+                playBackgroundMusic();
+            }
+            
+            update();
+        }
+
+        // 게임 오버
+        function gameOver() {
+            gameRunning = false;
+            stopBackgroundMusic(); // 배경음악 중지
+            finalScoreElement.textContent = score;
+            gameOverScreen.style.display = 'block';
+        }
+
+        // 게임 재시작
+        function restartGame() {
+            gameOverScreen.style.display = 'none';
+            startGame();
+        }
+    </script>
+</body>
+</html>
